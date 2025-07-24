@@ -15,7 +15,7 @@ class MovieCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        //setupUI()
+        setupUI()
     }
     private func setupUI() {
         contentView.layer.cornerRadius = 16
@@ -23,7 +23,7 @@ class MovieCell: UICollectionViewCell {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.15
         layer.shadowOffset = CGSize(width: 0, height: 4)
-        layer.shadowRadius = 8
+        layer.shadowRadius = 2
         layer.masksToBounds = false
 
     }

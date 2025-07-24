@@ -11,6 +11,7 @@ import Combine
 final class MovieHomeViewModel: ObservableObject {
     
     @Published var recommendedMovies: [Movie] = []
+    @Published var popularMovies: [Movie] = []
     @Published var topSearchItems: [MultiSearchItem] = []
 
     private var cancellables = Set<AnyCancellable>()
@@ -19,13 +20,15 @@ final class MovieHomeViewModel: ObservableObject {
     func fetchHomeData() {
         Task {
             do {
-                async let recommended = try service.fetchPopularMovies()
+                async let recommended = try service.fetchRecomendedMovies()
+                async let popular = try service.fetchPopularMovies()
                 async let topSearches = try service.fetchTrendingAll()
 
-                let (recommendedResult, topSearchResult) = try await (recommended, topSearches)
+                let (recommendedResult, popularResult, topSearchResult) = try await (recommended, popular, topSearches)
 
                 
                 self.recommendedMovies = recommendedResult
+                self.popularMovies = popularResult
                 self.topSearchItems = topSearchResult
                 
                 print("✅ Data fetched - Movies: \(recommendedResult.count), Top searches: \(topSearchResult.count)")

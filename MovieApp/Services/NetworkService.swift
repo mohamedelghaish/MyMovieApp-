@@ -39,6 +39,13 @@ final class TMDbService: ObservableObject {
     }
 
     func fetchPopularMovies() async throws -> [Movie] {
+        let url = URL(string: "\(baseURL)/movie/popular?api_key=\(apiKey)")!
+        let response = try await network.request(url, responseType: TMDbResponse<Movie>.self)
+        print("resultttttt\(response)")
+        return Array(response.results.prefix(3))
+    }
+    
+    func fetchRecomendedMovies() async throws -> [Movie] {
         let url = URL(string: "\(baseURL)/movie/550/recommendations?api_key=\(apiKey)")!
         let response = try await network.request(url, responseType: TMDbResponse<Movie>.self)
         print("resultttttt\(response)")
@@ -48,8 +55,7 @@ final class TMDbService: ObservableObject {
     func fetchTrendingAll() async throws -> [MultiSearchItem] {
         let url = URL(string: "\(baseURL)/trending/all/day?api_key=\(apiKey)")!
         let response = try await network.request(url, responseType: TMDbResponse<MultiSearchItem>.self)
-        return Array(response.results.prefix(3))
-    }
+        return Array(response.results.prefix(4))    }
 
     func fetchMovieDetails(movieId: Int) async throws -> MovieDetails {
         let url = URL(string: "\(baseURL)/movie/\(movieId)?api_key=\(apiKey)")!
@@ -58,20 +64,15 @@ final class TMDbService: ObservableObject {
 }
 
 
+// MARK: - Generic Response Wrapper
 struct TMDbResponse<T: Codable>: Codable {
     let page: Int?
     let results: [T]
     let totalPages: Int?
     let totalResults: Int?
-    
-    enum CodingKeys: String, CodingKey {
-        case page, results
-        case totalPages = "total_pages"
-        case totalResults = "total_results"
-    }
 }
 
-// MARK: - Movie Details Model (Extended)
+// MARK: - Movie Details Model
 struct MovieDetails: Codable, Identifiable {
     let id: Int
     let title: String
@@ -96,45 +97,22 @@ struct MovieDetails: Codable, Identifiable {
     let productionCompanies: [ProductionCompany]?
     let productionCountries: [ProductionCountry]?
     let spokenLanguages: [SpokenLanguage]?
-    
-    enum CodingKeys: String, CodingKey {
-        case id, title, overview, adult, popularity, runtime, genres
-        case budget, revenue, status, tagline, homepage
-        case originalTitle = "original_title"
-        case posterPath = "poster_path"
-        case backdropPath = "backdrop_path"
-        case releaseDate = "release_date"
-        case originalLanguage = "original_language"
-        case voteAverage = "vote_average"
-        case voteCount = "vote_count"
-        case imdbId = "imdb_id"
-        case productionCompanies = "production_companies"
-        case productionCountries = "production_countries"
-        case spokenLanguages = "spoken_languages"
-    }
-    
-    // Computed properties for full image URLs
+
     var fullPosterURL: String? {
         guard let posterPath = posterPath else { return nil }
         return "https://image.tmdb.org/t/p/w500\(posterPath)"
     }
-    
+
     var fullBackdropURL: String? {
         guard let backdropPath = backdropPath else { return nil }
         return "https://image.tmdb.org/t/p/original\(backdropPath)"
     }
-    
-    // Formatted runtime
+
     var formattedRuntime: String? {
         guard let runtime = runtime else { return nil }
         let hours = runtime / 60
         let minutes = runtime % 60
-        
-        if hours > 0 {
-            return "\(hours)h \(minutes)m"
-        } else {
-            return "\(minutes)m"
-        }
+        return hours > 0 ? "\(hours)h \(minutes)m" : "\(minutes)m"
     }
 }
 
@@ -150,23 +128,12 @@ struct ProductionCompany: Codable, Identifiable {
     let name: String
     let logoPath: String?
     let originCountry: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id, name
-        case logoPath = "logo_path"
-        case originCountry = "origin_country"
-    }
 }
 
 // MARK: - Production Country Model
 struct ProductionCountry: Codable {
     let iso31661: String
     let name: String
-    
-    enum CodingKeys: String, CodingKey {
-        case iso31661 = "iso_3166_1"
-        case name
-    }
 }
 
 // MARK: - Spoken Language Model
@@ -174,10 +141,4 @@ struct SpokenLanguage: Codable {
     let englishName: String
     let iso6391: String
     let name: String
-    
-    enum CodingKeys: String, CodingKey {
-        case englishName = "english_name"
-        case iso6391 = "iso_639_1"
-        case name
-    }
 }
