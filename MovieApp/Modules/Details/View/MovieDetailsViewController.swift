@@ -23,8 +23,10 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate, UI
     @IBOutlet weak var generesCollectionView: UICollectionView!
     
     @IBOutlet weak var detailsView: UIView!
+    @IBOutlet weak var saveBtn: UIButton!
     
     var movieId: Int!
+    var isMovieSaved : Bool = false
     
     @IBAction func back(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
@@ -38,6 +40,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate, UI
         setupUI()
         bindViewModel()
         viewModel.fetchMovieDetails(by: movieId)
+        checkAndUpdateSavedStatus()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -117,7 +120,36 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate, UI
             }
             .store(in: &cancellables)
     }
-    
+    private func checkAndUpdateSavedStatus() {
+        if let movieId = movieId {
+            isMovieSaved = viewModel.isMovieSavedInCoreData(movieId: movieId)
+            updateSaveButton()
+        }
+    }
+
+    private func updateSaveButton() {
+        if isMovieSaved {
+            saveBtn.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+        } else {
+            saveBtn.setImage(UIImage(systemName: "bookmark"), for: .normal)
+        }
+        
+        saveBtn.layer.cornerRadius = 8
+        
+    }
+
+    @IBAction func saveBtn(_ sender: Any) {
+        guard let movieId = movieId else { return }
+        if isMovieSaved {
+            viewModel.deleteMovieFromCoreData(by: movieId)
+            isMovieSaved = false
+        } else {
+            viewModel.saveCurrentMovie()
+            isMovieSaved = true
+        }
+        updateSaveButton()
+    }
+
 }
 
 extension MovieDetailsViewController: UICollectionViewDataSource {

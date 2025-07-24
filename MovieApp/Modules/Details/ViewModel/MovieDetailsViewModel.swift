@@ -25,13 +25,32 @@ final class MovieDetailsViewModel: ObservableObject {
                 
                 self.movieDetails = movieDetailsResult
                 
-                print("✅ Data fetched - MovieDetails: \(movieDetailsResult.id)")
+
                 
             } catch {
-                print("❌ Failed to fetch home data: \(error)")
+                print(" Failed to fetch home data: \(error)")
             }
+
         }
+
     }
     
+    func saveCurrentMovie() {
+        guard let movie = movieDetails else { return }
+        CoreDataManager.shared.saveMovie(
+            id: Int64(movie.id),
+            title: movie.title,
+            posterURL: movie.fullPosterURL,
+            overview: movie.overview
+        )
+    }
+    
+    func deleteMovieFromCoreData(by id: Int) {
+        CoreDataManager.shared.deleteMovie(by: Int64(id))
+    }
+    
+    func isMovieSavedInCoreData(movieId: Int) -> Bool {
+        return CoreDataManager.shared.fetchMovie(by: Int64(movieId)) != nil
+    }
     
 }

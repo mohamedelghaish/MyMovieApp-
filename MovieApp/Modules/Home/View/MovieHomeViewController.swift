@@ -28,9 +28,12 @@ class MovieHomeViewController: UIViewController, UICollectionViewDelegate,UIColl
         bindViewModel()
         viewModel.fetchHomeData()
     }
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
     private func setupUI() {
-        // Register nibs
+       
         recommendedCollectionView.register(UINib(nibName: "MovieCell", bundle: nil), forCellWithReuseIdentifier: "MovieCell")
         popularCollectionView.register(UINib(nibName: "SuggetionMovieCell", bundle: nil), forCellWithReuseIdentifier: "SuggetionMovieCell")
         topSearchTableView.register(UINib(nibName: "TopSearchCell", bundle: nil), forCellReuseIdentifier: "TopSearchCell")
@@ -105,7 +108,6 @@ class MovieHomeViewController: UIViewController, UICollectionViewDelegate,UIColl
         viewModel.$recommendedMovies
             .receive(on: DispatchQueue.main)
             .sink { [weak self] movies in
-                print("Recommended movies updated: \(movies.count)")
                     self?.recommendedCollectionView.reloadData()
             }
             .store(in: &cancellables)
@@ -113,7 +115,6 @@ class MovieHomeViewController: UIViewController, UICollectionViewDelegate,UIColl
         viewModel.$popularMovies
             .receive(on: DispatchQueue.main)
             .sink { [weak self] movies in
-                print("Recommended movies updated: \(movies.count)")
                 self?.popularCollectionView.reloadData()
                 self?.pageControl.numberOfPages = movies.count
                 DispatchQueue.main.async {
@@ -133,6 +134,12 @@ class MovieHomeViewController: UIViewController, UICollectionViewDelegate,UIColl
             }
             .store(in: &cancellables)
     }
+    
+    @IBAction func favoriteBtn(_ sender: Any) {
+        let favoriteVC = FavoriteViewController(nibName: "FavoriteViewController", bundle: nil)
+            navigationController?.pushViewController(favoriteVC, animated: true)
+    }
+    
 }
 
 

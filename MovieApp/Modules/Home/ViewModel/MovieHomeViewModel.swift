@@ -31,11 +31,11 @@ final class MovieHomeViewModel: ObservableObject {
                 self.popularMovies = popularResult
                 self.topSearchItems = topSearchResult
                 
-                print("✅ Data fetched - Movies: \(recommendedResult.count), Top searches: \(topSearchResult.count)")
+               
                 
             } catch {
-                print("❌ Failed to fetch home data: \(error)")
-                // Optionally set empty arrays on error
+                print(" Failed to fetch home data: \(error)")
+               
                 self.recommendedMovies = []
                 self.topSearchItems = []
             }

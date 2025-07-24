@@ -49,7 +49,7 @@
                                         </constraints>
                                         <color key="tintColor" systemColor="systemPurpleColor"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="magnifyingglass" catalog="system">
+                                        <state key="normal" image="heart.fill" catalog="system">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <userDefinedRuntimeAttributes>
@@ -57,6 +57,9 @@
                                                 <integer key="value" value="16"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="favoriteBtn:" destination="9RS-xR-BgO" eventType="touchUpInside" id="UUB-mS-riK"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zID-lz-JXK">
                                         <rect key="frame" x="353" y="20" width="32" height="32"/>
@@ -331,9 +334,12 @@
                                                     <constraint firstAttribute="width" constant="44" id="sfa-Eo-lEb"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                <state key="normal" title="🔖">
+                                                <state key="normal" image="bookmark" catalog="system">
                                                     <color key="titleColor" systemColor="systemYellowColor"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="saveBtn:" destination="ByH-xA-75j" eventType="touchUpInside" id="6jk-6z-PTM"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⭐ 9.1/10 IMDb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vb3-8F-DNh">
                                                 <rect key="frame" x="19.999999999999993" y="367.33333333333331" width="118.33333333333331" height="20.333333333333314"/>
@@ -567,6 +573,7 @@
                         <outlet property="movieLength" destination="0AO-qf-c52" id="IwD-iJ-Tx5"/>
                         <outlet property="movieName" destination="eNq-vj-qMV" id="sJg-sX-Joj"/>
                         <outlet property="movieRate" destination="Vb3-8F-DNh" id="Wik-fU-27N"/>
+                        <outlet property="saveBtn" destination="1MQ-Nm-W2H" id="JEf-uL-WSi"/>
                         <outlet property="viewerAge" destination="K7g-Jb-u5t" id="Rec-qQ-o4V"/>
                     </connections>
                 </viewController>
@@ -579,7 +586,8 @@
     <resources>
         <image name="arrow.backward" catalog="system" width="128" height="95"/>
         <image name="bell" catalog="system" width="125" height="128"/>
-        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
+        <image name="bookmark" catalog="system" width="110" height="128"/>
+        <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>

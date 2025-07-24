@@ -34,8 +34,7 @@ class SuggetionMovieCell: UICollectionViewCell {
         movieTitle.numberOfLines = 1
         
         movieImage.contentMode = .scaleToFill
-            //movieImage.clipsToBounds = true
-            //movieImage.layer.cornerRadius = 16
+           
     }
 
 }
