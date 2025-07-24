@@ -43,6 +43,8 @@ class MovieHomeViewController: UIViewController, UICollectionViewDelegate,UIColl
         popularCollectionView.dataSource = self
         popularCollectionView.delegate = self
         topSearchTableView.dataSource = self
+        topSearchTableView.delegate = self
+        
         
         
         setupPopularCollectionView()
@@ -203,7 +205,7 @@ extension MovieHomeViewController: UICollectionViewDataSource {
         }
 }
 
-extension MovieHomeViewController: UITableViewDataSource {
+extension MovieHomeViewController: UITableViewDataSource,UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.topSearchItems.count
     }

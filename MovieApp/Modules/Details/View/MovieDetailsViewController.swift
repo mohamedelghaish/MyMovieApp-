@@ -77,31 +77,41 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate, UI
         castCollectionView.showsHorizontalScrollIndicator = false
     }
     private func setupGenresCollectionView() {
-        let horizontalInset: CGFloat = 20
-        let spacing: CGFloat = 4
+        let horizontalInset: CGFloat = 16
+        let spacing: CGFloat = 8
         
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
+        flowLayout.scrollDirection = .horizontal
         
-        let availableWidth = generesCollectionView.bounds.width - (horizontalInset * 2) - (spacing * 2)
-        let itemWidth = availableWidth / 5
+        // Fixed size for all genre pills
+        let itemWidth: CGFloat = 85
+        let itemHeight: CGFloat = 28
         
-        flowLayout.itemSize = CGSize(width: itemWidth, height: 24)
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: horizontalInset, bottom: 0, right: horizontalInset)
+        flowLayout.itemSize = CGSize(width: itemWidth, height: itemHeight)
+        flowLayout.minimumInteritemSpacing = spacing
+        flowLayout.minimumLineSpacing = spacing
+        flowLayout.sectionInset = UIEdgeInsets(
+            top: 0,
+            left: horizontalInset,
+            bottom: 0,
+            right: horizontalInset
+        )
+        
+        // Disable automatic sizing
+        flowLayout.estimatedItemSize = .zero
         
         generesCollectionView.collectionViewLayout = flowLayout
         generesCollectionView.showsHorizontalScrollIndicator = false
-        generesCollectionView.layer.cornerRadius = 8
+        generesCollectionView.showsVerticalScrollIndicator = false
     }
+
     private func bindViewModel() {
         viewModel.$movieDetails
             .receive(on: DispatchQueue.main)
             .sink { [weak self] movieDetails in
                 guard let self = self, let movie = movieDetails else { return }
                 
-                print("Recommended movies detailssss: \(movie.id)")
+                
                 
                 self.movieName.text = movie.title
                 self.movieRate.text = "⭐️ \(String(format: "%.1f", movie.voteAverage ?? 0))/10"
@@ -148,6 +158,16 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate, UI
             isMovieSaved = true
         }
         updateSaveButton()
+    }
+    
+    
+    @IBAction func playTrailer(_ sender: Any) {
+        showAlert(title: "Trailer Not Found", message: "No trailer is available for this movie.")
+    }
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 
 }

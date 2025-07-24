@@ -22,4 +22,8 @@ class GenresCell: UICollectionViewCell {
         movieView.layer.borderWidth = 1
         movieView.layer.borderColor = UIColor.gray.cgColor
     }
+    override func layoutSubviews() {
+            super.layoutSubviews()
+            contentView.layoutIfNeeded()
+        }
 }
